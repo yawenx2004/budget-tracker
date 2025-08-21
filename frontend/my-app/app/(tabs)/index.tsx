@@ -12,13 +12,13 @@ export default function Index() {
       const today = new Date().toISOString().slice(0, 10);
       const numAmount = parseFloat(amount);
 
-      // error if no reason & no amount
-      if (!reason) {
-        Alert.alert("Error", "Please enter a reason");
-        return;
-      }
+      // error if no amount & no reason
       if (isNaN(numAmount)) {
         Alert.alert("Error", "Please enter a valid amount");
+        return;
+      }
+      if (!reason) {
+        Alert.alert("Error", "Please enter a reason for spending");
         return;
       }
 
@@ -37,7 +37,7 @@ export default function Index() {
       console.log("Submitting spending...", { reason, amount: numAmount });
 
       if (response.ok) {
-        Alert.alert("Success", `Inserted ID: ${data.inserted_id}`);
+        Alert.alert("Success",  "Entry added for spending");
         setReason("");
         setAmount("");
       } else {
@@ -54,13 +54,22 @@ export default function Index() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.section}>
+      <Pressable 
+        style={({ pressed }) => [
+          styles.buttonHovering,
+          pressed && styles.pressed
+        ]}
+      >
+        <Text style={styles.textBig}>+</Text>
+      </Pressable>
+
+      <View style={styles.sectionMain}>
         <TextInput
-          style={[styles.textInput, styles.textInputCta]}
+          style={styles.textInputCta}
           value={amount}
           onChangeText={setAmount}
           placeholder="0.00"
-          placeholderTextColor='#677599ff'
+          placeholderTextColor='#b6bed3ff'
           keyboardType="numeric"
         />
 
@@ -68,17 +77,27 @@ export default function Index() {
           style={styles.textInput}
           value={reason}
           onChangeText={setReason}
-          placeholder="Purpose: coffee, bus tickets, bribe money..."
-          placeholderTextColor='#677599ff'
+          placeholder="coffee, bus tickets, bribe money..."
+          placeholderTextColor='#74809eff'
         />
 
-        <Pressable style={styles.button} onPress={submitSpending}>
+        <Pressable 
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.pressed
+          ]} 
+          onPress={submitSpending}
+        >
           <Text style={styles.textBold}>Submit</Text>
         </Pressable>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.text}>Edit index.tsx to edit this screen.</Text>
+        <Text style={styles.text}>Balances & goals shown here.</Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.text}>Spending pie charts shown here.</Text>
       </View>
     </View>
   );
