@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Text, TextInput, View, Button, Alert } from "react-native";
+import { Text, TextInput, View, Pressable, Alert } from "react-native";
 import styles from '../styles';
 
 export default function Index() {
-  const [date, setDate] = useState("");
   const [reason, setReason] = useState("");
   const [amount, setAmount] = useState("");
 
   const submitSpending = async () => {
     try {
+      // set date to today
       const today = new Date().toISOString().slice(0, 10);
       const numAmount = parseFloat(amount);
 
+      // error if no reason & no amount
       if (!reason) {
         Alert.alert("Error", "Please enter a reason");
         return;
@@ -21,7 +22,8 @@ export default function Index() {
         return;
       }
 
-      const response = await fetch("http://127.0.0.1:5000/spending", {
+      // post to server
+      const response = await fetch("https://budget-tracker-5hqr.onrender.com/spending", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -53,28 +55,30 @@ export default function Index() {
   return (
     <View style={styles.screen}>
       <View style={styles.section}>
-        <Text>Reason:</Text>
         <TextInput
-          value={reason}
-          onChangeText={setReason}
-        />
-
-        <Text>Amount:</Text>
-        <TextInput
+          style={[styles.textInput, styles.textInputCta]}
           value={amount}
           onChangeText={setAmount}
           placeholder="0.00"
+          placeholderTextColor='#677599ff'
           keyboardType="numeric"
         />
 
-        <Button
-          title="Add spending"
-          onPress={submitSpending}
+        <TextInput
+          style={styles.textInput}
+          value={reason}
+          onChangeText={setReason}
+          placeholder="Purpose: coffee, bus tickets, bribe money..."
+          placeholderTextColor='#677599ff'
         />
+
+        <Pressable style={styles.button} onPress={submitSpending}>
+          <Text style={styles.textBold}>Submit</Text>
+        </Pressable>
       </View>
 
       <View style={styles.section}>
-        <Text>Edit index.tsx to edit this screen.</Text>
+        <Text style={styles.text}>Edit index.tsx to edit this screen.</Text>
       </View>
     </View>
   );

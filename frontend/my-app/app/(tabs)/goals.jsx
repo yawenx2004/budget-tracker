@@ -5,7 +5,7 @@ export default function Goalas() {
   return (
     <View style={styles.screen}>
       <View style={styles.section}>
-        <Text>
+        <Text style={styles.text}>
           Set your goals here and determine goal progress.
         </Text>
       </View>

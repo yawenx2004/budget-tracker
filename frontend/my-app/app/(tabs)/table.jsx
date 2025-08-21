@@ -5,7 +5,7 @@ export default function Table() {
   return (
     <View style={styles.screen}>
       <View style={styles.section}>
-        <Text>
+        <Text style={styles.text}>
           This page hosts tables of past spendings, with options to edit 
           and rate purchase satisfaction.
         </Text>
