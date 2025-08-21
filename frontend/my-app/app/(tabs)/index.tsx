@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, TextInput, View, Button, Alert } from "react-native";
 import styles from '../styles';
 
 export default function Index() {
@@ -7,11 +7,45 @@ export default function Index() {
   const [reason, setReason] = useState("");
   const [amount, setAmount] = useState("");
 
-  const submitSpending = async() => {
+  const submitSpending = async () => {
     try {
-      
-    } catch (error) {
+      const today = new Date().toISOString().slice(0, 10);
+      const numAmount = parseFloat(amount);
 
+      if (!reason) {
+        Alert.alert("Error", "Please enter a reason");
+        return;
+      }
+      if (isNaN(numAmount)) {
+        Alert.alert("Error", "Please enter a valid amount");
+        return;
+      }
+
+      const response = await fetch("http://127.0.0.1:5000/spending", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: today,
+          reason,
+          amount: numAmount,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert("Success", `Inserted ID: ${data.inserted_id}`);
+        setReason("");
+        setAmount("");
+      } else {
+        Alert.alert("Error", data.error);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Alert.alert("Error", error.message);
+      } else {
+        Alert.alert("Error", String(error));
+      }
     }
   };
 
@@ -22,7 +56,7 @@ export default function Index() {
         <TextInput
           value={date}
           onChangeText={setDate}
-          placeholder="MM-DD-YYYY"
+          placeholder="YYYY-MM-DD"
         />
 
         <Text>Reason:</Text>
@@ -37,6 +71,11 @@ export default function Index() {
           onChangeText={setAmount}
           placeholder="0.00"
           keyboardType="numeric"
+        />
+
+        <Button
+          title="Add spending"
+          onPress={submitSpending}
         />
       </View>
 
