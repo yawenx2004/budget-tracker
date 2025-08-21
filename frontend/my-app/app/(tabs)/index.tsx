@@ -32,6 +32,7 @@ export default function Index() {
       });
 
       const data = await response.json();
+      console.log("Submitting spending...", { reason, amount: numAmount });
 
       if (response.ok) {
         Alert.alert("Success", `Inserted ID: ${data.inserted_id}`);
@@ -52,13 +53,6 @@ export default function Index() {
   return (
     <View style={styles.screen}>
       <View style={styles.section}>
-        <Text>Date:</Text>
-        <TextInput
-          value={date}
-          onChangeText={setDate}
-          placeholder="YYYY-MM-DD"
-        />
-
         <Text>Reason:</Text>
         <TextInput
           value={reason}

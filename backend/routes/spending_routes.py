@@ -7,7 +7,7 @@ def add_spending():
     data = request.get_json()
 
     # check for required fields
-    date = data.get("data")
+    date = data.get("date")
     reason = data.get("reason")
     amount = data.get("amount")
     if not date or not reason or not amount:
