@@ -37,7 +37,7 @@ export default function Index() {
       console.log("Submitting spending...", { reason, amount: numAmount });
 
       if (response.ok) {
-        Alert.alert("Success",  "Entry added for spending");
+        Alert.alert("Success", "Entry added for spending");
         setReason("");
         setAmount("");
       } else {
